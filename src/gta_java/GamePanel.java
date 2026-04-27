@@ -2,6 +2,8 @@
 package gta_java;
 
 import Entity.Player;
+import Tile.TileManager;
+
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -14,8 +16,8 @@ public class GamePanel extends JPanel implements Runnable {
     final int originalTileSize = 16;
     final int scale = 3;
     public int tileSize = originalTileSize * scale;
-    final int maxScreenCol = 16;
-    final int maxScreenRow = 12;
+    public int maxScreenCol = 16;
+    public int maxScreenRow = 12;
     final int screenWidth = tileSize * maxScreenCol;
     final int screenHeight = tileSize * maxScreenRow;
 
@@ -25,8 +27,8 @@ public class GamePanel extends JPanel implements Runnable {
     KeyHandler keyH = new KeyHandler();
     Thread gameThread;
     
-    // 1. Solo declara la variable aquí
     Player player; 
+    TileManager tileM = new TileManager(this);
 
     public GamePanel() {
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
@@ -35,7 +37,6 @@ public class GamePanel extends JPanel implements Runnable {
         this.addKeyListener(keyH);
         this.setFocusable(true);
         
-        // 2. Inicializa al jugador AQUÍ, al final del constructor
         this.player = new Player(this, keyH);
     }
 
@@ -74,7 +75,10 @@ public class GamePanel extends JPanel implements Runnable {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
 
-        // Dibujamos al jugador usando sus sprites
+        // DIBUJAR BALDOSAS PRIMERO
+        tileM.draw(g2);
+
+        // LUEGO DIBUJAR AL JUGADOR
         player.draw(g2);
 
         g2.dispose();
