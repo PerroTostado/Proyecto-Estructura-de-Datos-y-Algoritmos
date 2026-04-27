@@ -16,10 +16,9 @@ public class TileManager {
     public TileManager(GamePanel gp) {
         this.gp = gp;
         tile = new Tile[10]; // Puedes aumentar este número si tienes más tipos de baldosas
-        mapTileNum = new int[gp.maxScreenCol][gp.maxScreenRow];
-
+        mapTileNum = new int[gp.maxWorldCol][gp.maxWorldRow];
         getTileImage();
-        loadMap("res/maps/map01.txt"); // Asegúrate de crear esta carpeta y archivo en 'src/main/resources'
+        loadMap("/res/maps/map01.txt"); // Asegúrate de crear esta carpeta y archivo en 'src/main/resources'
     }
 
     public void getTileImage() {
@@ -68,7 +67,7 @@ public class TileManager {
             e.printStackTrace();
         }
     }
-
+/** 
     public void draw(Graphics2D g2) {
         int col = 0;
         int row = 0;
@@ -87,6 +86,37 @@ public class TileManager {
                 x = 0;
                 row++;
                 y += gp.tileSize;
+            }
+        }
+    }
+*/
+    public void draw(Graphics2D g2) {
+        int worldCol = 0;
+        int worldRow = 0;
+
+        while (worldCol < gp.maxWorldCol && worldRow < gp.maxWorldRow) {
+            int tileNum = mapTileNum[worldCol][worldRow];
+
+            int worldX = worldCol * gp.tileSize;
+            int worldY = worldRow * gp.tileSize;
+            
+            // Calcular la posición relativa a la pantalla
+            int screenX = worldX - gp.player.worldX + gp.player.screenX;
+            int screenY = worldY - gp.player.worldY + gp.player.screenY;
+
+            // Rendimiento: Solo dibujar si la baldosa es visible en pantalla
+            if (worldX + gp.tileSize > gp.player.worldX - gp.player.screenX &&
+                worldX - gp.tileSize < gp.player.worldX + gp.player.screenX &&
+                worldY + gp.tileSize > gp.player.worldY - gp.player.screenY &&
+                worldY - gp.tileSize < gp.player.worldY + gp.player.screenY) {
+                
+                g2.drawImage(tile[tileNum].image, screenX, screenY, gp.tileSize, gp.tileSize, null);
+            }
+
+            worldCol++;
+            if (worldCol == gp.maxWorldCol) {
+                worldCol = 0;
+                worldRow++;
             }
         }
     }
