@@ -22,5 +22,6 @@ public class GTA_JAVA {
         window.setLocationRelativeTo(null); // La ventana aparece en el centro
         window.setVisible(true);
         gamePanel.startGameThread();
+        
     }
 }
