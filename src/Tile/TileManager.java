@@ -10,31 +10,49 @@ import gta_java.GamePanel;
 
 public class TileManager {
     GamePanel gp;
-    public Tile[] tile;
+    public Tile[] tile; // Aumentamos el tamaño del array para más tipos de baldosas
     public int mapTileNum[][];
 
     public TileManager(GamePanel gp) {
         this.gp = gp;
-        tile = new Tile[10]; // Puedes aumentar este número si tienes más tipos de baldosas
+        tile = new Tile[17]; // Puedes aumentar este número si tienes más tipos de baldosas
         mapTileNum = new int[gp.maxWorldCol][gp.maxWorldRow];
         getTileImage();
-        loadMap("/res/maps/map01.txt"); // Asegúrate de crear esta carpeta y archivo en 'src/main/resources'
+        loadMap("/res/maps/map.txt"); // Asegúrate de crear esta carpeta y archivo en 'src/main/resources'
     }
 
     public void getTileImage() {
+        
+            // Esquineras
+            setup(0, "esq_inf_izq", false);
+            setup(1, "esq_inf_der", false);
+            setup(2, "esq_sup_izq", false);
+            setup(3, "esq_sup_der", false);
+            // Intersecciones en T y Cruce
+            setup(4, "inter_inf", false);
+            setup(6, "inter_sup", false);
+            setup(7, "inter_izq", false);
+            setup(8, "inter_der", false);
+            setup(9, "inter_4_vias", false);
+            // Vías normales
+            setup(10, "via_horizontal", false);
+            setup(11, "via_vertical", false);
+            // Pasos de cebra
+            setup(12, "cebra_izq", false);
+            setup(13, "cebra_der", false);
+            setup(14, "cebra_arr", false);
+            setup(15, "cebra_aba", false);
+            // Edificios / Fondo
+            setup(16, "ed", false);
+        
+    }
+
+    // Método auxiliar para cargar imágenes de forma limpia
+    public void setup(int index, String imageName, boolean collision) {
         try {
-            tile[0] = new Tile();
-            tile[0].image = ImageIO.read(getClass().getResourceAsStream("/res/tiles/esq_inf_izq.png"));
-
-            tile[1] = new Tile();
-            tile[1].image = ImageIO.read(getClass().getResourceAsStream("/res/tiles/esq_inf_der.png"));
-
-            tile[2] = new Tile();
-            tile[2].image = ImageIO.read(getClass().getResourceAsStream("/res/tiles/esq_sup_izq.png"));
-            
-            tile[3] = new Tile();
-            tile[3].image = ImageIO.read(getClass().getResourceAsStream("/res/tiles/esq_sup_der.png"));
-            
+            tile[index] = new Tile();
+            tile[index].image = ImageIO.read(getClass().getResourceAsStream("/res/tiles/" + imageName + ".png"));
+            tile[index].collision = collision;
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -48,16 +66,18 @@ public class TileManager {
             int col = 0;
             int row = 0;
 
-            while (col < gp.maxScreenCol && row < gp.maxScreenRow) {
+            while (col < gp.maxWorldCol && row < gp.maxWorldRow) {
                 String line = br.readLine();
+                if (line == null) break;
 
-                while (col < gp.maxScreenCol) {
-                    String numbers[] = line.split(" ");
+                String numbers[] = line.trim().split(" ");
+
+                while (col < gp.maxWorldCol) {
                     int num = Integer.parseInt(numbers[col]);
                     mapTileNum[col][row] = num;
                     col++;
                 }
-                if (col == gp.maxScreenCol) {
+                if (col == gp.maxWorldCol) {
                     col = 0;
                     row++;
                 }
@@ -67,6 +87,9 @@ public class TileManager {
             e.printStackTrace();
         }
     }
+
+
+
 /** 
     public void draw(Graphics2D g2) {
         int col = 0;

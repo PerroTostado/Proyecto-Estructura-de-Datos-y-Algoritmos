@@ -81,10 +81,8 @@ public class GamePanel extends JPanel implements Runnable {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
 
-        // DIBUJAR BALDOSAS PRIMERO
-        tileM.draw(g2);
-
-        // LUEGO DIBUJAR AL JUGADOR
+        // IMPORTANTE: Dibujar los tiles ANTES que al jugador
+        tileM.draw(g2); 
         player.draw(g2);
 
         g2.dispose();
