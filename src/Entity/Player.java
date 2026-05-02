@@ -7,7 +7,8 @@ import gta_java.UtilityTool; // Importamos la herramienta de escalado
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
+import java.io.IOException;;
+
 
 public class Player extends Entity {
     GamePanel gp; // Solo declaras la variable, NO le pongas "= new GamePanel()"
@@ -26,6 +27,13 @@ public class Player extends Entity {
 
         setDefaultValues();
         getPlayerImage();
+
+        // Definimos el área de colisión (x, y, ancho, alto)
+        solidArea = new Rectangle(); // Ajusta estos valores según el tamaño del sprite y la parte que colisione
+        solidArea.x = 8;
+        solidArea.y = 16;
+        solidArea.width = 16;
+        solidArea.height = 16;
     }
 
     public void setDefaultValues() {
@@ -65,19 +73,32 @@ public class Player extends Entity {
     }
 
     public void update() {
-        // Movimiento básico basado en KeyHandler
-        if (keyH.upPressed) {
-            direction = "up";
-            worldY -= speed;
-        } else if (keyH.downPressed) {
-            direction = "down";
-            worldY += speed;
-        } else if (keyH.leftPressed) {
-            direction = "left";
-            worldX -= speed;
-        } else if (keyH.rightPressed) {
-            direction = "right";
-            worldX += speed;
+        if(keyH.upPressed || keyH.downPressed || keyH.leftPressed || keyH.rightPressed) {
+            
+            // 1. SOLO asignamos la dirección (eliminamos los worldX/Y -= speed de aquí)
+            if (keyH.upPressed) {
+                direction = "up";
+            } else if (keyH.downPressed) {
+                direction = "down";
+            } else if (keyH.leftPressed) {
+                direction = "left";
+            } else if (keyH.rightPressed) {
+                direction = "right";
+            }
+
+            // 2. COMPROBAMOS LA COLISIÓN
+            collisionOn = false;
+            gp.cChecker.checkTile(this);
+            
+            // 3. SI NO HAY COLISIÓN, RECIÉN MOVEMOS AL JUGADOR
+            if(collisionOn == false) {
+                switch(direction) {
+                    case "up":    worldY -= speed; break;
+                    case "down":  worldY += speed; break;
+                    case "left":  worldX -= speed; break;
+                    case "right": worldX += speed; break;
+                }
+            }
         }
     }
 

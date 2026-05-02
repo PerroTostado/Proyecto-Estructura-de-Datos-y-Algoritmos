@@ -15,7 +15,7 @@ public class TileManager {
 
     public TileManager(GamePanel gp) {
         this.gp = gp;
-        tile = new Tile[17]; // Puedes aumentar este número si tienes más tipos de baldosas
+        tile = new Tile[21]; // Puedes aumentar este número si tienes más tipos de baldosas
         mapTileNum = new int[gp.maxWorldCol][gp.maxWorldRow];
         getTileImage();
         loadMap("/res/maps/map.txt"); // Asegúrate de crear esta carpeta y archivo en 'src/main/resources'
@@ -42,9 +42,12 @@ public class TileManager {
             setup(13, "cebra_der", false);
             setup(14, "cebra_arr", false);
             setup(15, "cebra_aba", false);
-            // Edificios / Fondo
-            setup(16, "ed", false);
-        
+            // Edificios
+            setup(16, "ed", true);
+            setup(17, "ed_esq_inf_der", true);
+            setup(18, "ed_esq_inf_izq", true);
+            setup(19, "ed_esq_sup_der", true);
+            setup(20, "ed_esq_sup_izq", true);
     }
 
     // Método auxiliar para cargar imágenes de forma limpia
