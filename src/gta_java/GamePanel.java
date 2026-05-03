@@ -1,6 +1,7 @@
 package gta_java;
 
 import Entity.Player;
+import Object.SuperObject;
 import Tile.TileManager;
 
 import java.awt.Color;
@@ -35,6 +36,8 @@ public class GamePanel extends JPanel implements Runnable {
     public Player player; 
     public TileManager tileM;
     public CollisionChecker cChecker;
+    public AssetSetter aSetter = new AssetSetter(this);
+    public SuperObject obj[] = new SuperObject[10]; // 10 espacios para objetos en pantalla
 
     public GamePanel() {
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
@@ -52,6 +55,10 @@ public class GamePanel extends JPanel implements Runnable {
     public void startGameThread() {
         gameThread = new Thread(this);
         gameThread.start();
+    }
+
+    public void update() {
+        player.update();
     }
 
     @Override
@@ -74,18 +81,26 @@ public class GamePanel extends JPanel implements Runnable {
         }
     }
 
-    public void update() {
-        // Toda la lógica de movimiento está dentro de la clase Player
-        player.update();
+    public void setupGame() {
+        aSetter.setObject();
     }
 
-    @Override
+    // En el método paintComponent
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-        Graphics2D g2 = (Graphics2D) g;
+        Graphics2D g2 = (Graphics2D)g;
 
-        // IMPORTANTE: Dibujar los tiles ANTES que al jugador
-        tileM.draw(g2); 
+        // TILE
+        tileM.draw(g2);
+
+        // OBJECT
+        for(int i = 0; i < obj.length; i++) {
+            if(obj[i] != null) {
+                obj[i].draw(g2, this);
+            }
+        }
+
+        // PLAYER
         player.draw(g2);
 
         g2.dispose();
