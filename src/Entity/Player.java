@@ -7,7 +7,11 @@ import gta_java.UtilityTool; // Importamos la herramienta de escalado
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.IOException;;
+import java.io.IOException;
+import java.util.TimerTask;
+
+import java.util.Timer;
+import java.util.TimerTask;
 
 
 public class Player extends Entity {
@@ -34,6 +38,9 @@ public class Player extends Entity {
         solidArea.y = 16;
         solidArea.width = 16;
         solidArea.height = 16;
+
+        solidAreaDefaultX = solidArea.x; 
+        solidAreaDefaultY = solidArea.y;
     }
 
     public void setDefaultValues() {
@@ -98,6 +105,36 @@ public class Player extends Entity {
                     case "left":  worldX -= speed; break;
                     case "right": worldX += speed; break;
                 }
+            }
+        }
+
+        int objIndex = gp.cChecker.checkObject(this, true);
+        pickUpObject(objIndex);
+    }
+
+    public void pickUpObject(int i) {
+        if(i != 999) {
+            String objectName = gp.obj[i].name;
+
+            switch(objectName) {
+
+                case "Ray": // O el nombre que uses para el objeto de velocidad
+                    int speedBoost = 2;
+                    speed += speedBoost; // Aumenta la velocidad
+                    gp.obj[i] = null; // Elimina el objeto del mapa
+                    System.out.println("¡Velocidad aumentada por 5 segundos!");
+
+                    // Creamos un temporizador para revertir el efecto
+                    Timer timer = new Timer();
+                    timer.schedule(new TimerTask() {
+                        @Override
+                        public void run() {
+                            speed -= speedBoost; // Restaura la velocidad original
+                            System.out.println("El efecto de velocidad ha terminado.");
+                            timer.cancel(); // Finaliza el timer
+                        }
+                    }, 5000); // 5000 milisegundos = 5 segundos
+                    break;
             }
         }
     }
