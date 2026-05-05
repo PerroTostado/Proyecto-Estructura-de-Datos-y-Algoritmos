@@ -34,10 +34,11 @@ public class Player extends Entity {
 
         // Definimos el área de colisión (x, y, ancho, alto)
         solidArea = new Rectangle(); // Ajusta estos valores según el tamaño del sprite y la parte que colisione
-        solidArea.x = 8/2;
-        solidArea.y = 16/2;
-        solidArea.width = 16;
-        solidArea.height = 16;
+        solidArea.x = 8;
+        solidArea.y = 12;
+        solidArea.width = 18;
+        solidArea.height = 18;
+        
 
         solidAreaDefaultX = solidArea.x; 
         solidAreaDefaultY = solidArea.y;
