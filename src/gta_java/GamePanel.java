@@ -30,6 +30,9 @@ public class GamePanel extends JPanel implements Runnable {
     // FPS
     int FPS = 60;
 
+    Sound se = new Sound(); // SE = Sound Effects
+    Sound music = new Sound(); // Para música de fondo
+
     KeyHandler keyH = new KeyHandler();
     Thread gameThread;
     
@@ -82,7 +85,8 @@ public class GamePanel extends JPanel implements Runnable {
     }
 
     public void setupGame() {
-        aSetter.setObject();
+        aSetter.setObject(); // Coloca los objetos en el mapa
+        playMusic(1); // Reproducimos la música de fondo 
     }
 
     // En el método paintComponent
@@ -104,5 +108,20 @@ public class GamePanel extends JPanel implements Runnable {
         player.draw(g2);
 
         g2.dispose();
+    }
+
+    public void playMusic(int i) {
+        music.setFile(i);
+        music.play();
+        music.loop(); // Para que la música se repita continuamente
+    }
+
+    public void stopMusic() {
+        music.stop();
+    }
+
+    public void playSE(int i) {
+        se.setFile(i);
+        se.play();
     }
 }

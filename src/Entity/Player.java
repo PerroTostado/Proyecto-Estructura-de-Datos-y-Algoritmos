@@ -118,7 +118,9 @@ public class Player extends Entity {
 
             switch(objectName) {
 
-                case "Ray": // O el nombre que uses para el objeto de velocidad
+                case "Ray":
+                    gp.playSE(0); // Reproducimos el sonido del power-up
+
                     int speedBoost = 2;
                     speed += speedBoost; // Aumenta la velocidad
                     gp.obj[i] = null; // Elimina el objeto del mapa
