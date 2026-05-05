@@ -1,7 +1,6 @@
 package gta_java;
 
 import Object.OBJ_Ray;
-import Object.SuperObject;
 
 
 public class AssetSetter {

@@ -90,7 +90,7 @@ public class CollisionChecker {
                     }
                 }
 
-                // Resetear valores de solidArea para que no se acumulen
+                // Resetear valores para la próxima comprobación
                 entity.solidArea.x = entity.solidAreaDefaultX;
                 entity.solidArea.y = entity.solidAreaDefaultY;
                 gp.obj[i].solidArea.x = gp.obj[i].solidAreaDefaultX;
@@ -99,7 +99,6 @@ public class CollisionChecker {
         }
         return index;
     }
-
 
 }
 
