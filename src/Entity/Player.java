@@ -114,29 +114,28 @@ public class Player extends Entity {
     }
 
     public void pickUpObject(int i) {
-        if(i != 999) {
+        if (i != 999) {
             String objectName = gp.obj[i].name;
 
-            switch(objectName) {
-
-                case "Ray":
-                    gp.playSE(0); // Reproducimos el sonido del power-up
-
+            switch (objectName) {
+                case "Ray": 
+                    gp.playSE(0); // Sonido de powerup
                     int speedBoost = 2;
-                    speed += speedBoost; // Aumenta la velocidad
-                    gp.obj[i] = null; // Elimina el objeto del mapa
-                    System.out.println("¡Velocidad aumentada por 5 segundos!");
+                    speed += speedBoost;
+                    gp.obj[i] = null;
+                    
+                    // Mostramos el mensaje en la UI
+                    gp.ui.showMessage("¡VELOCIDAD AUMENTADA!");
 
-                    // Creamos un temporizador para revertir el efecto
                     Timer timer = new Timer();
                     timer.schedule(new TimerTask() {
                         @Override
                         public void run() {
-                            speed -= speedBoost; // Restaura la velocidad original
-                            System.out.println("El efecto de velocidad ha terminado.");
-                            timer.cancel(); // Finaliza el timer
+                            speed -= speedBoost;
+                            gp.ui.showMessage("Efecto terminado");
+                            timer.cancel();
                         }
-                    }, 5000); // 5000 milisegundos = 5 segundos
+                    }, 5000);
                     break;
             }
         }
