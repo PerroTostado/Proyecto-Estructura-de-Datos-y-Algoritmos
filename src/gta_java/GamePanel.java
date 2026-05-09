@@ -21,6 +21,11 @@ public class GamePanel extends JPanel implements Runnable {
     public final int screenWidth = tileSize * maxScreenCol;
     public final int screenHeight = tileSize * maxScreenRow;
 
+    // ESTADOS DEL JUEGO
+    public int gameState;
+    public final int playState = 1;
+    public final int pauseState = 2;
+
     // AJUSTES DEL MUNDO
     public final int maxWorldCol = 50;
     public final int maxWorldRow = 50;
@@ -33,7 +38,7 @@ public class GamePanel extends JPanel implements Runnable {
     Sound se = new Sound(); // SE = Sound Effects
     Sound music = new Sound(); // Para música de fondo
 
-    KeyHandler keyH = new KeyHandler();
+    KeyHandler keyH = new KeyHandler(this);
     Thread gameThread;
     
     public Player player; 
@@ -53,6 +58,9 @@ public class GamePanel extends JPanel implements Runnable {
         this.cChecker = new CollisionChecker(this);
         this.player = new Player(this, keyH);
         this.tileM = new TileManager(this);
+
+        // Estado inicial
+        gameState = playState;
         
     }
 
@@ -62,7 +70,12 @@ public class GamePanel extends JPanel implements Runnable {
     }
 
     public void update() {
-        player.update();
+        if (gameState == playState) {
+            player.update();
+        }
+        if (gameState == pauseState) {
+            // No se actualiza nada, el juego está congelado
+        }
     }
 
     @Override
