@@ -5,7 +5,7 @@ import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.text.DecimalFormat;
-import Object.OBJ_Ray; // Importamos Ray porque hace de Corazón
+import Object.OBJ_Ray; 
 
 public class UI {
     GamePanel gp;
@@ -18,6 +18,7 @@ public class UI {
 
     double playTime;
     DecimalFormat dFormat = new DecimalFormat("#0.00");
+    private Graphics2D g2;
 
     public UI(GamePanel gp) {
         this.gp = gp;
@@ -34,30 +35,47 @@ public class UI {
     }
 
     public void draw(Graphics2D g2) {
-        if (gameFinished) {
-            drawFinalScreen(g2);
-        } else {
-            // Dibujar el icono del corazón (Ray) en la UI
-            //g2.drawImage(heartImage, gp.tileSize / 2, gp.tileSize / 2, gp.tileSize, gp.tileSize, null);
-            
-            // Tiempo de juego
+
+        this.g2 = g2;
+
+        if (gp.gameState == gp.playState) {
+            // Dibuja la UI normal (tiempo, mensajes, etc.)
             playTime += (double) 1 / 60;
             g2.setFont(arial_40);
             g2.setColor(Color.yellow);
             g2.drawString("Tiempo: " + dFormat.format(playTime), gp.tileSize * 11, 65);
+        }
+        
+        if (gp.gameState == gp.pauseState) {
+            drawPauseScreen();
+        }
 
-            // Mensaje de texto (¡Velocidad!)
-            if (messageOn) {
-                g2.setFont(g2.getFont().deriveFont(30F));
-                g2.drawString(message, gp.tileSize / 2, gp.tileSize * 5);
+        if (gameFinished) {
+            drawFinalScreen(g2);
+        }
+
+        // Mensaje de texto (¡Velocidad!)
+        if (messageOn) {
+            g2.setFont(g2.getFont().deriveFont(30F));
+            g2.drawString(message, gp.tileSize / 2, gp.tileSize * 5);
                 
-                messageCounter++;
-                if (messageCounter > 120) {
-                    messageCounter = 0;
-                    messageOn = false;
-                }
+            messageCounter++;
+            if (messageCounter > 120) {
+                messageCounter = 0;
+                messageOn = false;
             }
         }
+    }
+    
+
+    public void drawPauseScreen() {
+        g2.setFont(g2.getFont().deriveFont(Font.BOLD, 80F));
+        g2.setColor(Color.yellow);
+        String text = "PAUSA";
+        int x = getXforCenteredText(text, g2);
+        int y = gp.screenHeight / 2;
+
+        g2.drawString(text, x, y);
     }
 
     public void drawFinalScreen(Graphics2D g2) {
