@@ -22,6 +22,7 @@ public class Player extends Entity {
     public final int screenY;
 
     public Player(GamePanel gp, KeyHandler keyH) {
+        super(gp); // Llamamos al constructor de Entity
         this.gp = gp;
         this.keyH = keyH;
 

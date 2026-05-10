@@ -1,5 +1,6 @@
 package gta_java;
 
+import Entity.NPC_Police;
 import Object.OBJ_Ray;
 
 
@@ -17,4 +18,10 @@ public class AssetSetter {
 
         // Se pueden añadir más objetos 
     }
+
+    public void setNPC() {
+    gp.npc[0] = new NPC_Police(gp);
+    gp.npc[0].worldX = gp.tileSize * 21;
+    gp.npc[0].worldY = gp.tileSize * 8;
+}
 }
