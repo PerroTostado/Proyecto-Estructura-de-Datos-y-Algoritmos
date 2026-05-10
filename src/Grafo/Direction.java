@@ -1,4 +1,3 @@
-
 package grafo;
 
 public enum Direction {
