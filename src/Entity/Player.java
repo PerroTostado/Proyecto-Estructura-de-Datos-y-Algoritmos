@@ -22,6 +22,7 @@ public class Player extends Entity {
     public final int screenY;
 
     public Player(GamePanel gp, KeyHandler keyH) {
+        super(gp); // Llamamos al constructor de Entity
         this.gp = gp;
         this.keyH = keyH;
 
@@ -151,9 +152,30 @@ public class Player extends Entity {
             case "right": image = right; break;
         }
 
-        // Como la imagen ya viene escalada de setup(), no pasamos el tamaño aquí
+        // El tamaño que queremos para el coche (mitad del tile)
+        int carWidth = gp.tileSize / 2;
+        int carHeight = gp.tileSize / 2;
+
+        // Posición por defecto (centro de la pantalla)
+        int x = screenX;
+        int y = screenY;
+
+        // LÓGICA DE BORDES (Para que no se vea negro)
+        if(screenX > worldX) { x = worldX; }
+        if(screenY > worldY) { y = worldY; }
+        
+        int rightOffset = gp.screenWidth - screenX;
+        if(rightOffset > gp.worldWidth - worldX) {
+            x = gp.screenWidth - (gp.worldWidth - worldX);
+        }
+        int bottomOffset = gp.screenHeight - screenY;
+        if(bottomOffset > gp.worldHeight - worldY) {
+            y = gp.screenHeight - (gp.worldHeight - worldY);
+        }
+
         if (image != null) {
-            g2.drawImage(image, screenX, screenY, gp.tileSize/2, gp.tileSize/2, null);
+            // Dibujamos con carWidth y carHeight para que sea pequeño
+            g2.drawImage(image, x, y, carWidth, carHeight, null);
         }
     }
 }
