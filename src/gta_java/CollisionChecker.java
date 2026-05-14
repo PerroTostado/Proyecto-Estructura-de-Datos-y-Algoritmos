@@ -100,7 +100,6 @@ public class CollisionChecker {
         return index;
     }
 
-
     public void checkPlayer(Entity entity) {
         // Obtener posición del área sólida de la entidad en el mundo
         entity.solidArea.x = entity.worldX + entity.solidArea.x;
@@ -126,6 +125,29 @@ public class CollisionChecker {
         entity.solidArea.y = entity.solidAreaDefaultY;
         gp.player.solidArea.x = gp.player.solidAreaDefaultX;
         gp.player.solidArea.y = gp.player.solidAreaDefaultY;
+    }
+
+    public int getTileAtEntity(Entity entity) {
+        // Calculamos la posición futura según la dirección actual
+        int nextWorldX = entity.worldX;
+        int nextWorldY = entity.worldY;
+
+        switch (entity.direction) {
+            case "up":    nextWorldY -= entity.speed; break;
+            case "down":  nextWorldY += entity.speed; break;
+            case "left":  nextWorldX -= entity.speed; break;
+            case "right": nextWorldX += entity.speed; break;
+        }
+
+        // Calculamos la columna y fila del centro del NPC
+        int col = (nextWorldX + gp.tileSize / 2) / gp.tileSize;
+        int row = (nextWorldY + gp.tileSize / 2) / gp.tileSize;
+
+        // Evitamos errores si el NPC intenta salir del mapa
+        if (col >= 0 && col < gp.maxWorldCol && row >= 0 && row < gp.maxWorldRow) {
+            return gp.tileM.mapTileNum[col][row];
+        }
+        return -1; // Fuera del mapa
     }
 }
 
