@@ -15,7 +15,7 @@ import java.util.TimerTask;
 
 
 public class Player extends Entity {
-    GamePanel gp;
+    GamePanel gp; // Solo declaras la variable, NO le pongas "= new GamePanel()"
     KeyHandler keyH;
 
     public final int screenX;

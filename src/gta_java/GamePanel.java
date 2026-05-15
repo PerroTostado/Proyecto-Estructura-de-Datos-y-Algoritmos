@@ -17,8 +17,8 @@ public class GamePanel extends JPanel implements Runnable {
     final int originalTileSize = 16;
     final int scale = 4;
     public final int tileSize = originalTileSize * scale;
-    public final int maxScreenCol = 18;
-    public final int maxScreenRow = 14;
+    public final int maxScreenCol = 16;
+    public final int maxScreenRow = 12;
     public final int screenWidth = tileSize * maxScreenCol;
     public final int screenHeight = tileSize * maxScreenRow;
 
@@ -28,8 +28,8 @@ public class GamePanel extends JPanel implements Runnable {
     public final int pauseState = 2;
 
     // AJUSTES DEL MUNDO
-    public final int maxWorldCol = 52;
-    public final int maxWorldRow = 52;
+    public final int maxWorldCol = 50;
+    public final int maxWorldRow = 50;
     public final int worldWidth = tileSize * maxWorldCol;
     public final int worldHeight = tileSize * maxWorldRow;
 
