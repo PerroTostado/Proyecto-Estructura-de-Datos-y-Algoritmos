@@ -1,4 +1,4 @@
-package grafo;
+package Grafo;
 
 public enum Direction {
     UP,

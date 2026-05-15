@@ -7,7 +7,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import javax.imageio.ImageIO;
 import gta_java.GamePanel;
-import grafo.Direction;
+import Grafo.Direction;
 
 public class TileManager {
     GamePanel gp;
