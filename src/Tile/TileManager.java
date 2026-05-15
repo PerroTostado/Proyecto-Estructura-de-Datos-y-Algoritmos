@@ -16,7 +16,7 @@ public class TileManager {
 
     public TileManager(GamePanel gp) {
         this.gp = gp;
-        tile = new Tile[60]; // Puedes aumentar este número si tienes más tipos de baldosas
+        tile = new Tile[70]; // Puedes aumentar este número si tienes más tipos de baldosas
         mapTileNum = new int[gp.maxWorldCol][gp.maxWorldRow];
         getTileImage();
         cargarMapaAleatorio(); 
