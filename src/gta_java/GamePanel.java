@@ -2,6 +2,7 @@ package gta_java;
 
 import Entity.Entity;
 import Entity.Player;
+import Grafo.DiGrafo;
 import Object.SuperObject;
 import Tile.TileManager;
 
@@ -39,6 +40,7 @@ public class GamePanel extends JPanel implements Runnable {
 
     Sound se = new Sound(); // SE = Sound Effects
     Sound music = new Sound(); // Para música de fondo
+    public DiGrafo diGrafo = new DiGrafo(maxWorldRow, maxWorldCol); // Grafo dirigido para el pathfinding
 
     KeyHandler keyH = new KeyHandler(this);
     Thread gameThread;
@@ -57,11 +59,17 @@ public class GamePanel extends JPanel implements Runnable {
         this.setDoubleBuffered(true);
         this.addKeyListener(keyH);
         this.setFocusable(true);
-        
+
         this.cChecker = new CollisionChecker(this);
         this.player = new Player(this, keyH);
         this.tileM = new TileManager(this);
 
+        // Inicializamos el grafo con el tamaño del mundo
+        this.diGrafo = new DiGrafo(maxWorldRow, maxWorldCol);
+        
+        // IMPORTANTE: Generar el grafo basado en los tiles cargados
+        this.diGrafo.generar(tileM);
+        
         // Estado inicial
         gameState = playState;
         
