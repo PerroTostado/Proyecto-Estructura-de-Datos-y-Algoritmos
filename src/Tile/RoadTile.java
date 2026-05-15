@@ -1,5 +1,5 @@
 package Tile;
-import grafo.Direction;
+import Grafo.Direction;
 import java.util.ArrayList;
 
 public class RoadTile extends Tile{
