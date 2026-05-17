@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import Entity.NPC_Police;
+import Object.OBJ_Goal;
 import Object.OBJ_Ray;
 import Tile.RoadTile;
 
@@ -37,14 +38,18 @@ public class AssetSetter {
         if (!carreterasDisponibles.isEmpty()) {
 
             Random random = new Random();
-
+            int randomIndex = random.nextInt(carreterasDisponibles.size());
+            int[] pos = carreterasDisponibles.get(randomIndex);
+            gp.obj[4] = new OBJ_Goal(gp);
+                    gp.obj[4].worldX = pos[0] * gp.tileSize;
+                    gp.obj[4].worldY = pos[1] * gp.tileSize;
             // Crear 3 objetos
             for (int i = 0; i < 3; i++) {
 
                 if (i < gp.obj.length) {
 
-                    int randomIndex = random.nextInt(carreterasDisponibles.size());
-                    int[] pos = carreterasDisponibles.get(randomIndex);
+                    randomIndex = random.nextInt(carreterasDisponibles.size());
+                    pos = carreterasDisponibles.get(randomIndex);
 
                     gp.obj[i] = new OBJ_Ray(gp);
                     gp.obj[i].worldX = pos[0] * gp.tileSize;

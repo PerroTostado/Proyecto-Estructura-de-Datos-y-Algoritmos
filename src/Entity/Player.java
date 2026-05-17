@@ -2,51 +2,46 @@ package Entity;
 
 import gta_java.GamePanel;
 import gta_java.KeyHandler;
-import gta_java.UtilityTool; // Importamos la herramienta de escalado
+import gta_java.UtilityTool;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.util.TimerTask;
-
 import java.util.Timer;
 import java.util.TimerTask;
 
-
 public class Player extends Entity {
-    GamePanel gp; // Solo declaras la variable, NO le pongas "= new GamePanel()"
+
+    GamePanel gp;
     KeyHandler keyH;
 
     public final int screenX;
     public final int screenY;
 
     public Player(GamePanel gp, KeyHandler keyH) {
-        super(gp); // Llamamos al constructor de Entity
+        super(gp);
         this.gp = gp;
         this.keyH = keyH;
 
-        // Centrar al jugador en la pantalla
-        screenX = gp.screenWidth / 2 - (gp.tileSize / 2);
-        screenY = gp.screenHeight / 2 - (gp.tileSize / 2);
+        // Centrar al jugador exactamente en el centro de la pantalla
+        screenX = gp.screenWidth / 2;
+        screenY = gp.screenHeight / 2;
 
         setDefaultValues();
         getPlayerImage();
 
-        // Definimos el área de colisión (x, y, ancho, alto)
-        solidArea = new Rectangle(); // Ajusta estos valores según el tamaño del sprite y la parte que colisione
+        solidArea = new Rectangle();
         solidArea.x = 8;
         solidArea.y = 12;
         solidArea.width = 18;
         solidArea.height = 18;
-        
 
-        solidAreaDefaultX = solidArea.x; 
+        solidAreaDefaultX = solidArea.x;
         solidAreaDefaultY = solidArea.y;
     }
 
     public void setDefaultValues() {
-        // Posición inicial en el mapa del mundo (ejemplo: baldosa 23, 21)
         worldX = gp.tileSize * 23;
         worldY = gp.tileSize * 21;
         speed = 4;
@@ -54,20 +49,18 @@ public class Player extends Entity {
     }
 
     public void getPlayerImage() {
-        // Usamos el método setup para cargar y escalar cada imagen
-        up = setup("up");
-        down = setup("down");
-        left = setup("left");
+        up    = setup("up");
+        down  = setup("down");
+        left  = setup("left");
         right = setup("right");
     }
 
-    // Método helper para evitar que el programa truene si no encuentra la imagen
+    // Carga y escala la imagen al tamaño del tile
     public BufferedImage setup(String imageName) {
         UtilityTool uTool = new UtilityTool();
         BufferedImage image = null;
 
         try {
-            // La ruta comienza con / para indicar la raíz de la carpeta src
             image = ImageIO.read(getClass().getResourceAsStream("/res/player/" + imageName + ".png"));
 
             if (image == null) {
@@ -82,32 +75,29 @@ public class Player extends Entity {
     }
 
     public void update() {
-        if(keyH.upPressed || keyH.downPressed || keyH.leftPressed || keyH.rightPressed) {
-            
-            // 1. SOLO asignamos la dirección (eliminamos los worldX/Y -= speed de aquí)
-            if (keyH.upPressed) {
-                direction = "up";
-            } else if (keyH.downPressed) {
-                direction = "down";
-            } else if (keyH.leftPressed) {
-                direction = "left";
-            } else if (keyH.rightPressed) {
-                direction = "right";
-            }
+        if (keyH.upPressed || keyH.downPressed || keyH.leftPressed || keyH.rightPressed) {
 
-            // 2. COMPROBAMOS LA COLISIÓN
+            // Asignar dirección según tecla presionada
+            if      (keyH.upPressed)    direction = "up";
+            else if (keyH.downPressed)  direction = "down";
+            else if (keyH.leftPressed)  direction = "left";
+            else if (keyH.rightPressed) direction = "right";
+
+            // Comprobar colisión antes de mover
             collisionOn = false;
             gp.cChecker.checkTile(this);
-            
-            // 3. SI NO HAY COLISIÓN, RECIÉN MOVEMOS AL JUGADOR
-            if(collisionOn == false) {
-                switch(direction) {
+
+            // Mover solo si no hay colisión
+            if (!collisionOn) {
+                switch (direction) {
                     case "up":    worldY -= speed; break;
                     case "down":  worldY += speed; break;
                     case "left":  worldX -= speed; break;
                     case "right": worldX += speed; break;
                 }
             }
+
+
         }
 
         int objIndex = gp.cChecker.checkObject(this, true);
@@ -119,13 +109,11 @@ public class Player extends Entity {
             String objectName = gp.obj[i].name;
 
             switch (objectName) {
-                case "Ray": 
-                    gp.playSE(0); // Sonido de powerup
+                case "Ray":
+                    gp.playSE(0);
                     int speedBoost = 2;
                     speed += speedBoost;
                     gp.obj[i] = null;
-                    
-                    // Mostramos el mensaje en la UI
                     gp.ui.showMessage("¡VELOCIDAD AUMENTADA!");
 
                     Timer timer = new Timer();
@@ -137,6 +125,10 @@ public class Player extends Entity {
                             timer.cancel();
                         }
                     }, 5000);
+                    break;
+
+                case "Goal":
+                    gp.gameState = gp.winState;
                     break;
             }
         }
@@ -152,29 +144,14 @@ public class Player extends Entity {
             case "right": image = right; break;
         }
 
-        // El tamaño que queremos para el coche (mitad del tile)
-        int carWidth = gp.tileSize / 2;
+        int carWidth  = gp.tileSize / 2;
         int carHeight = gp.tileSize / 2;
 
-        // Posición por defecto (centro de la pantalla)
-        int x = screenX;
-        int y = screenY;
-
-        // LÓGICA DE BORDES (Para que no se vea negro)
-        if(screenX > worldX) { x = worldX; }
-        if(screenY > worldY) { y = worldY; }
-        
-        int rightOffset = gp.screenWidth - screenX;
-        if(rightOffset > gp.worldWidth - worldX) {
-            x = gp.screenWidth - (gp.worldWidth - worldX);
-        }
-        int bottomOffset = gp.screenHeight - screenY;
-        if(bottomOffset > gp.worldHeight - worldY) {
-            y = gp.screenHeight - (gp.worldHeight - worldY);
-        }
+        // Convierte coordenadas del mundo a coordenadas de pantalla usando la cámara
+        int x = worldX - gp.cameraX;
+        int y = worldY - gp.cameraY;
 
         if (image != null) {
-            // Dibujamos con carWidth y carHeight para que sea pequeño
             g2.drawImage(image, x, y, carWidth, carHeight, null);
         }
     }
